@@ -1,7 +1,17 @@
 package com.hunterdavis02.skilltrees_api.skills;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+@Repository
 public interface SkillRepository extends JpaRepository<Skill, Long> {
     boolean existsByNameIgnoreCase(String name);
+
+    List<Skill> findByParentSkillIsNull();
+
+    List<Skill> findByParentSkillId(Long parentId);
+
+
 }
