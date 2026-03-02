@@ -27,7 +27,7 @@ public class SkillController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET /api/skills/childern - Get children of Skill with ID 1
+    // GET /api/skills/children - Get children of Skill with ID 1
     @GetMapping("/{id}/children")
     public List<Skill> getChildren(@PathVariable Long id) {
         return skillService.getChildSkills(id);

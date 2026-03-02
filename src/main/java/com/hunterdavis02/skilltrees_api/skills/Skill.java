@@ -2,6 +2,7 @@ package com.hunterdavis02.skilltrees_api.skills;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.hunterdavis02.skilltrees_api.trees.Tree;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,13 @@ public class Skill {
     @JsonBackReference
     private Skill parentSkill;
 
-    @OneToMany(mappedBy = "parentSkill")  // One skill has MANY children
+    @OneToMany(mappedBy = "parentSkill", fetch = FetchType.EAGER)  // One skill has MANY children
     @JsonManagedReference
     private List<Skill> childSkills = new ArrayList<>();
+
+    @OneToOne(mappedBy = "rootSkill")  // Back-reference to Tree
+    @JsonBackReference("tree-rootSkill")
+    private Tree tree;
 
     protected Skill() {
 
@@ -44,9 +49,15 @@ public class Skill {
     public String getDescription() { return description; }
     public void setDescription(String description) {this.description = description; }
 
+    public String getIconUrl() { return iconUrl; }
+    public void setIconUrl(String iconUrl) { this.iconUrl = iconUrl; }
+
     public Skill getParentSkill() { return parentSkill; }
-    public void setParentSkill(Skill skill) { this.parentSkill = parentSkill; }
+    public void setParentSkill(Skill skill) { this.parentSkill = skill; }
 
     public List<Skill> getChildSkills() { return childSkills; }
     public void setChildSkills(List<Skill> childSkills) { this.childSkills = childSkills; }
+
+    public Tree getTree() { return tree; }
+    public void setTree(Tree tree) { this.tree = tree; }
 }
