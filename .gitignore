@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+build/
+bin/
+
+# Compiled class files
+*.class
+
+# JAR files
+*.jar
+*.war
+
+# VS Code
+.vscode/
+
+# IntelliJ IDEA (in case you switch)
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
