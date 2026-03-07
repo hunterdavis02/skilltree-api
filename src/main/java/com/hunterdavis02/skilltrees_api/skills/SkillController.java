@@ -45,6 +45,19 @@ public class SkillController {
         return skillService.addChildSkill(parentId, skill);
     }
 
+    // DELETE /api/skills/1 - Delete skill and all its descendants
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSkill(@PathVariable Long id) {
+        skillService.deleteSkill(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // PATCH /api/skills/1 - Update name, description, or iconUrl
+    @PatchMapping("/{id}")
+    public Skill updateSkill(@PathVariable Long id, @RequestBody Skill updates) {
+        return skillService.updateSkill(id, updates);
+    }
+
     // GET /api/skills/1/tree - Get full tree from Skill 1
     @GetMapping("/{id}/tree")
     public Skill getSkillTree(@PathVariable Long id) {

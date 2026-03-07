@@ -27,13 +27,32 @@ public class SkillService {
         return skillRepository.save(skill);
     }
 
+    public void deleteSkill(Long id) {
+        Skill skill = skillRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Skill not found"));
+        skillRepository.delete(skill);
+    }
+
+    public Skill updateSkill(Long id, Skill updates) {
+        Skill skill = skillRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Skill not found"));
+        if (updates.getName() != null) skill.setName(updates.getName());
+        if (updates.getDescription() != null) skill.setDescription(updates.getDescription());
+        if (updates.getIconUrl() != null) skill.setIconUrl(updates.getIconUrl());
+        return skillRepository.save(skill);
+    }
+
     public Skill addChildSkill(Long parentId, Skill childSkill) {
-        Optional<Skill> parent = skillRepository.findById(parentId);
-        if (parent.isPresent()) {
-            childSkill.setParentSkill(parent.get());
-            return skillRepository.save(childSkill);
+        Skill parent = skillRepository.findById(parentId)
+                .orElseThrow(() -> new IllegalArgumentException("Parent skill not found"));
+        int unlockedSlots = parent.getUnlockedChildSlots();
+        if (parent.getChildSkills().size() >= unlockedSlots) {
+            throw new IllegalArgumentException(
+                "No child slots available. Skill is level " + parent.getCurrentLevel() +
+                " with " + unlockedSlots + " slot(s) unlocked. Reach levels 3, 6, or 10 to unlock more.");
         }
-        throw new RuntimeException("Parent skill not found!");
+        childSkill.setParentSkill(parent);
+        return skillRepository.save(childSkill);
     }
 
     // Return Skill Tree branching from a skill
